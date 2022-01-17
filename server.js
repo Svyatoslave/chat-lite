@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
   console.log('user connected', socket.id);
 });
 
-server.listen(80, (err) => {
+server.listen(3000, (err) => {
   if (err) {
     throw Error(err);
   }
