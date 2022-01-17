@@ -1,13 +1,15 @@
 const express = require('express');
 
 const app = express();
-const server = require('http').Server(app);
+const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+
+const PORT = process.env.PORT || 3000;
+
+const rooms = new Map();
 
 app.use(express.json());
 app.use(express.static("build"));
-
-const rooms = new Map();
 
 app.get('/rooms/:id', (req, res) => {
   const { id: roomId } = req.params;
@@ -21,7 +23,7 @@ app.get('/rooms/:id', (req, res) => {
 });
 
 app.post('/rooms', (req, res) => {
-  const { roomId, userName } = req.body;
+  const { roomId } = req.body;
   if (!rooms.has(roomId)) {
     rooms.set(
       roomId,
@@ -63,7 +65,7 @@ io.on('connection', (socket) => {
   console.log('user connected', socket.id);
 });
 
-server.listen(process.env.PORT || 3000, (err) => {
+server.listen(PORT, (err) => {
   if (err) {
     throw Error(err);
   }
